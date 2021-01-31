@@ -84,7 +84,7 @@ def savings():
         savingsBalance = User.query.get('test').savingBalance
         # return str(lastSavingsDate)
         # return str(savingsBalance)
-        return render_template('savings.html',firstSavingsDate=firstSavingsDate, savingsBalance=savingsBalance)
+        return render_template('savings.html',firstSavingsDate=firstSavingsDate, savingBalance=savingsBalance)
     else:
         return redirect('/modifybalance')
 
