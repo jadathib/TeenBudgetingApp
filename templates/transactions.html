@@ -1,0 +1,31 @@
+{% extends 'layout.html' %}
+
+{% block main %}
+    <div class="container">
+       <table>
+           <tr>
+               <th>Date</th>
+               <th>Purpose</th>
+               <th>Amount</th>
+               <th>Category</th>
+           </tr>
+           {% if transactionHistory == None %}
+           <tr>
+               <td>-</td>
+               <td>-</td>
+               <td>-</td>
+               <td>-</td>
+           </tr>
+           {% else %}
+                {% for transaction in transactionHistory %}
+                <tr>
+                    <td>{{ transaction['date'] }}</td>
+                    <td>{{ transaction['purpose'] }}</td>
+                    <td>{{ transaction['amount'] }}</td>
+                    <td>{{ transaction['category'] }}</td>
+                </tr>
+                {% endfor %}
+           {% endif %}
+       </table>
+    </div>
+{% endblock %}

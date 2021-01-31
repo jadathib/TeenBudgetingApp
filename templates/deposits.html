@@ -1,5 +1,27 @@
 {% extends 'layout.html' %}
 
 {% block main %}
-
+    <form action="/deposits" method="POST">
+        <div class="d-flex flex-column justify-content-center col-md-4 offset-md-4">
+            <div class="input-group p-3">
+                <!-- <label for="amount"></label> -->
+                <span class="input-group-text">Amount: $</span>
+                <input class="form-control" type="number" name="amount" required="True">
+            </div>
+            <div class="input-group p-3">
+                <!-- <label for="date">Date</label> -->
+                <span class="input-group-text">Date: </span>
+                <input class="form-control" type="date" name="date" required="True">
+            </div>
+            <div class="input-group p-3">
+                <!-- <label for="savingPercent">Savings %</label> -->
+                <span class="input-group-text">Savings Percentage:</span>
+                <input class="form-control" type="number" min="10" max="100" name="savingPercent" required="True">
+                <span class="input-group-text">%</span>
+            </div>
+            <div class="input-group p-3">
+                <button type="submit" class="btn btn-success">Make Deposit</button>
+            </div>
+        </div>
+    </form>
 {% endblock %}
