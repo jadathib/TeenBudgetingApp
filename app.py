@@ -18,6 +18,11 @@ db = SQL('sqlite:///userbalances.db')
         savingPercent is stored as a real (floating point) number that should be between 0.1 & 1 (check this in logic)
 '''
 
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+
 @app.route('/checking', methods=["GET","POST"])
 def checking():
 
@@ -36,10 +41,14 @@ def checking():
 def savings():
     return "Savings Account Page"
 
-@app.route('/spendingcategory')
-def category():
-    return "Spending Category Page"
+@app.route('/transactions')
+def transactions():
+    return "Transactions Page"
 
-@app.route('/modifybalance')
-def modifybalance():
-    return render_template('modifybalance.html')
+@app.route('/deposits')
+def modifyDeposits():
+    return render_template('deposits.html')
+
+@app.route('/expenses')
+def modifyExpenses():
+    return render_template('expenses.html')
