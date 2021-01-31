@@ -20,30 +20,26 @@ db = SQL('sqlite:///userbalances.db')
 
 @app.route('/')
 def index():
+    print("Home Page")
     return render_template('index.html')
 
 
-@app.route('/checking', methods=["GET","POST"])
+@app.route('/checking')
 def checking():
+    print("Query for checking balance from database")
+    return render_template('checking.html')
 
-    if request.method=="GET":
-        allTransactions = db.execute("SELECT * FROM transactions")
-
-        totalBal = 0
-        for transaction in allTransactions:
-            if transaction['type'] == 'deposit':
-                totalBal += transaction['amount']
-        return render_template('checking.html')
-    else:
-        return redirect('/modifybalance')
-
-@app.route('/savings', methods=["GET","POST"])
+@app.route('/savings')
 def savings():
-    return "Savings Account Page"
+    print("Query for savings balance from database")
+    return render_template('savings.html')
 
 @app.route('/transactions')
 def transactions():
-    return "Transactions Page"
+    print("Quary for transaction date")
+    print("Quary for transaction amount")
+    print("Quary for transaction catagory")
+    return render_template('transactions.html')
 
 @app.route('/deposits')
 def modifyDeposits():
