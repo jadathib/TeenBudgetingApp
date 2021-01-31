@@ -24,6 +24,10 @@ def initialize_user_database():
         errorInfo = e.orig.args
         print(errorInfo)
 
+with app.app_context():
+    db.create_all()
+    test = str(Transactions.query.filter_by(username='test').all())
+    print(test)
 
 @app.before_first_request
 def initialize_transactions_database():
@@ -36,7 +40,7 @@ def initialize_transactions_database():
         if not bool(Transactions.query.filter_by(username='test').first()):
             db.session.add(transaction1)
             db.session.add(transaction2)
-            Transactions.query.get("test").checkingBalance = 4.00
+            print(Transactions.query.filter_by(username='test').all())
             db.session.commit()
     except exc.IntegrityError as e:
         errorInfo = e.orig.args
@@ -65,7 +69,6 @@ def index():
 def checking():
     if request.method=="GET":
         checkBalance = User.query.get('test').checkingBalance
-        #return str(checkBalance)
         return render_template('checking.html',checkBalance=checkBalance)
     else:
         return redirect('/modifybalance')
@@ -75,11 +78,12 @@ def checking():
 #How to show first savings date and last savings date?
 def savings():
     if request.method == "GET":
-        firstSavingsDate = Transactions.query.get('test').date
+        # return str(Transactions.query.filter_by(username='test').all())
+        firstSavingsDate = Transactions.query.order_by(Transactions.date.desc()).all()[0]
         lastSavingsDate = Transactions.query.order_by(Transactions.date.desc()).all()[-1]
         savingsBalance = User.query.get('test').savingBalance
-        #return str(firstSavingsDate)
-        #return str(savingsBalance)
+        # return str(lastSavingsDate)
+        # return str(savingsBalance)
         return render_template('savings.html',firstSavingsDate=firstSavingsDate, savingsBalance=savingsBalance)
     else:
         return redirect('/modifybalance')
@@ -89,7 +93,7 @@ def savings():
 def transactions():
     if request.method == 'GET':
         transactionsToDisplay = Transactions.query.filter_by(username='test').all()
-        return str(transactionToDisplay)
+        return str(transactionsToDisplay)
     else:
         return redirect('/modifybalance')
 

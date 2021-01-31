@@ -13,7 +13,8 @@ class User(db.Model):
 
 
 class Transactions(db.Model):
-    username = db.Column(db.String(20), unique=False, nullable=False, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    username = db.Column(db.String(20), unique=False, nullable=False, primary_key=False)
     date = db.Column(db.String(20), unique=False, nullable=False)
     purpose = db.Column(db.String(20), unique=False, nullable=False, default='withdrawal')
     amount = db.Column(db.Float, unique=False, nullable=False, default=0.00)
