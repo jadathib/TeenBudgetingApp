@@ -18,12 +18,21 @@
            </tr>
            {% else %}
                 {% for transaction in transactionHistory %}
-                <tr>
-                    <td>{{ transaction['date'] }}</td>
-                    <td>{{ transaction['purpose'] }}</td>
-                    <td>{{ transaction['amount'] }}</td>
-                    <td>{{ transaction['category'] }}</td>
-                </tr>
+                    {% if transaction['purpose'] == 'deposit' %}
+                    <tr style="background-color:forestgreen;">
+                        <td>{{ transaction['date'] }}</td>
+                        <td>{{ transaction['purpose'] }}</td>
+                        <td>{{ transaction['amount'] }}</td>
+                        <td>{{ transaction['category'] }}</td>
+                    </tr>
+                    {% else %}
+                    <tr style="background-color:orange;">
+                        <td>{{ transaction['date'] }}</td>
+                        <td>{{ transaction['purpose'] }}</td>
+                        <td>{{ transaction['amount'] }}</td>
+                        <td>{{ transaction['category'] }}</td>
+                    </tr>
+                    {% endif %}
                 {% endfor %}
            {% endif %}
        </table>
