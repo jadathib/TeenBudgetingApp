@@ -1,15 +1,19 @@
 # from __main__ import app
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import UserMixin
 db = SQLAlchemy()
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     username = db.Column(db.String(20), unique=True, nullable=False, primary_key=True)
     checkingBalance = db.Column(db.Float, unique=False, nullable=False, default=0.00)
     savingBalance = db.Column(db.Float, unique=False, nullable=False, default=0.00)
     #savingPercent = db.Column(db.Float, unique=False, nullable=False, default=0.00)
 
+    def get_id(self):
+        return self.username
+
     def __repr__(self):
-        return f"Username: '{self.username}, Checking Balance:'{self.checkingBalance}', Saving Balance:'{self.savingBalance}', Saving %:'{self.savingPercent}'"
+        return f"Username: '{self.username}, Checking Balance:'{self.checkingBalance}', Saving Balance:'{self.savingBalance}'"
 
 
 class Transactions(db.Model):
