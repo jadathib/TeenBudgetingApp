@@ -88,11 +88,8 @@ def savings():
 
 @app.route('/transactions', methods=["GET","POST"])
 def transactions():
-    if request.method == 'GET':
-        transactionsToDisplay = Transactions.query.filter_by(username='test').all()
-        return str(transactionsToDisplay)
-    else:
-        return redirect('/modifybalance')
+    transactionsToDisplay = Transactions.query.filter_by(username='test').order_by(Transactions.date.desc()).all()
+    return render_template('transactions.html', transactionHistory=transactionsToDisplay)
 
 @app.route('/deposits', methods=["GET","POST"])
 
