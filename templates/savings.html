@@ -5,25 +5,27 @@
         <h1 class="p-4 mx-auto">Savings Balance</h1>
         <h3 class="p-4 mx-auto">${{savingBalance}}</h3>
     </div>
-    <div class="container row">
-        {% for date in milestone %}
+    <div class="container flex column justify-content-center align-items-center">
+        <div class="p-4">
+            <p>You first started saving on {{firstSavingsDate['date']}}</p>
+        </div>
+        {% for date in milestones %}
             {% if loop.index == 1 %}
                 <div class="p-4">
-                    <p>You first started saving on {{date}}</p>
+                    <p>Milestone 1 reached $50: {{date}}</p>
                 </div>
-            {% elseif loop.index == 2 %}
+            {% elif loop.index == 2 %}
                 <div class="p-4">
-                    <p>You reached $50 in savings on {{date}}</p>
+                    <p>Milestone 2 reached $100: {{date}}</p>
                 </div>
-            {% elseif loop.index == 3 %}
+            {% elif loop.index == 3 %}
                 <div class="p-4">
-                    <p>You reached $100 in savings on {{date}}</p>
-                </div>
-            {% elseif loop.index == 4 %}
-                <div class="p-4">
-                    <p>You reached $200 in savings on {{date}}</p>
+                    <p>Milestone 3 reached $200: {{date}}</p>
                 </div>
             {% endif %}
         {% endfor %}
+        <div class="p-4">
+            <p>You reached your current savings balance on {{lastSavingsDate['date']}}</p>
+        </div>
     </div>
 {% endblock %}
