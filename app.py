@@ -74,8 +74,6 @@ def checking():
         return redirect('/modifybalance')
 
 @app.route('/savings', methods=["GET","POST"])
-#Only showing either firstSavingsDat OR savingsBalance, does not show both
-#How to show first savings date and last savings date?
 def savings():
     if request.method == "GET":
         # return str(Transactions.query.filter_by(username='test').all())
@@ -89,7 +87,6 @@ def savings():
         return redirect('/modifybalance')
 
 @app.route('/transactions', methods=["GET","POST"])
-#only showing one transaction
 def transactions():
     if request.method == 'GET':
         transactionsToDisplay = Transactions.query.filter_by(username='test').all()
@@ -98,14 +95,12 @@ def transactions():
         return redirect('/modifybalance')
 
 @app.route('/deposits', methods=["GET","POST"])
-#date gets passed as None even though values are passed
-#How to modifty the checking amount of the existing user?
+
 def modifyDeposits():
     if request.method == "POST":
         depositAmount = float(request.form.get('amount'))
         transactionDate = request.form.get('date')
         percentToSavings = float(request.form.get('savingPercent'))
-        #return str(type(percentToSavings))
         newTransaction = Transactions(username='test', date=transactionDate, purpose='deposit', 
             amount=depositAmount, savingPercent=percentToSavings)
         currentUser = User.query.get('test')
@@ -120,15 +115,14 @@ def modifyDeposits():
         return render_template('deposits.html')
 
 @app.route('/expenses', methods=["GET","POST"])
-#cannot open expenses page get 404
 def modifyExpenses():
     if request.method == "POST":
-        amountToDeduct = request.args.get('amount')
-        date = request.args.get('date')
-        category = request.args.get('expenseCategory')
-        return render_template('expenses.html')
+        amountToDeduct = request.form.get('amount')
+        date = request.form.get('date')
+        category = request.form.get('expenseCategory')
+        return render_template('expenses.html', statusMessage='Expense Recorded')
     else:
-        return redirect('index.html')
+        return render_template('expenses.html')
 
 
 if __name__ == '__main__':
