@@ -82,7 +82,7 @@ def savings():
         savingsBalance = User.query.get('test').savingBalance
         # return str(lastSavingsDate)
         # return str(savingsBalance)
-        return render_template('savings.html',firstSavingsDate=firstSavingsDate, savingBalance=savingsBalance)
+        return render_template('savings.html',firstSavingsDate=firstSavingsDate, savingBalance=savingsBalance, lastSavingsDate=lastSavingsDate)
     else:
         return redirect('/modifybalance')
 
@@ -114,9 +114,17 @@ def modifyDeposits():
 @app.route('/expenses', methods=["GET","POST"])
 def modifyExpenses():
     if request.method == "POST":
-        amountToDeduct = request.form.get('amount')
+        amountToDeduct = float(request.form.get('amount'))
         date = request.form.get('date')
-        category = request.form.get('expenseCategory')
+        category = request.form.get('category')
+
+        newTransaction = Transactions(username='test', date=date, purpose='withdrawal', amount=amountToDeduct,
+        category=category)
+
+        currentUser = User.query.get('test')
+        currentUser.checkingBalance = currentUser.checkingBalance - amountToDeduct
+        db.session.add(newTransaction)
+        db.session.commit()
         return render_template('expenses.html', statusMessage='Expense Recorded')
     else:
         return render_template('expenses.html')
