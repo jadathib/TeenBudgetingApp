@@ -1,6 +1,11 @@
 {% extends 'layout.html' %}
 
 {% block main %}
+{% if status %}
+    <div class="alert alert-warning">
+        {{ status }}
+    </div>
+    {% endif %}
     <form action="/register" method="POST">
         <div class="container">
             <div class="d-flex flex-column justify-content-center align-items-center col-md-4 offset-md-4">
