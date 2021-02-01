@@ -1,0 +1,30 @@
+{% extends 'layout.html' %}
+
+{% block main %}
+{% if status %}
+    <div class="alert alert-warning">
+        {{ status }}
+    </div>
+    {% endif %}
+    <form action="/register" method="POST">
+        <div class="container">
+            <div class="d-flex flex-column justify-content-center align-items-center col-md-4 offset-md-4">
+                <div class="input-group p-3">
+                    <span class="input-group-text">Username:</span>
+                    <input class="form-control" type="text" name="username" required="True">
+                </div>
+                <div class="input-group p-3">
+                    <span class="input-group-text">Password:</span>
+                    <input class="form-control" type="password" name="password">
+                </div>
+                <div class="input-group p-3">
+                    <span class="input-group-text">Confirm Password:</span>
+                    <input class="form-control" type="password" name="confirm-password">
+                </div>
+                <div class="input-group p-3">
+                    <button type="submit" class="btn btn-secondary">Register</button>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock %}
