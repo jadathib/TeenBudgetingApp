@@ -6,26 +6,41 @@
         <h3 class="p-4 mx-auto">${{savingBalance}}</h3>
     </div>
     <div class="container flex column justify-content-center align-items-center">
-        <div class="p-4">
-            <p>You first started saving on {{firstSavingsDate['date']}}</p>
+        <div class="card p-4">
+            <h6 class="card-title">Beginnings</h6>
+            <div class="card-body">
+                <p class="card-text">You first started saving on {{firstSavingsDate['date']}}</p> 
+            </div>
         </div>
         {% for date in milestones %}
             {% if loop.index == 1 %}
-                <div class="p-4">
-                    <p>Milestone 1 reached $50: {{date}}</p>
+                <div class="card p-4">
+                    <h6 class="card-title">Milestone 1</h6>
+                    <div class="card-body">
+                        <p class="card-text">Reached $50 on: {{date}}</p>
+                    </div>
                 </div>
             {% elif loop.index == 2 %}
-                <div class="p-4">
-                    <p>Milestone 2 reached $100: {{date}}</p>
+                <div class="card p-4">
+                    <h6 class="card-title">Milestone 2</h6>
+                    <div class="card-body">
+                        <p class="card-text">Reached $100 on: {{date}}</p>
+                    </div>
                 </div>
             {% elif loop.index == 3 %}
-                <div class="p-4">
-                    <p>Milestone 3 reached $200: {{date}}</p>
+                <div class="card p-4">
+                    <h6 class="card-title">Milestone 3</h6>
+                    <div class="card-body">
+                        <p class="card-text">Reached $200 on: {{date}}</p>
+                    </div>
                 </div>
             {% endif %}
         {% endfor %}
-        <div class="p-4">
-            <p>You reached your current savings balance on {{lastSavingsDate['date']}}</p>
+        <div class="card p-4">
+            <h6 class="card-title">Latest Milestone</h6>
+            <div class="card-body">
+                <p>You reached your current savings balance on {{lastSavingsDate['date']}}</p>
+            </div>
         </div>
     </div>
 {% endblock %}
