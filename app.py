@@ -1,11 +1,17 @@
-from flask import Flask, render_template,request, redirect
+from flask import Flask, render_template,request, redirect, flash
 from cs50 import SQL
 from models import db, User, Transactions
 from sqlalchemy import exc, desc
 from milestones import *
+from flask_login import LoginManager, login_user, current_user, logout_user, login_required
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///userbalances.db'
+app.secret_key = b'\x1bt!"e\xf7)Q5\xebz"f\xfa\xe6K'
+
+# Initialization of login manager
+login_manager = LoginManager()
+login_manager.init_app(app)
 # Initialization of database
 db.init_app(app)
 
@@ -61,6 +67,8 @@ def initialize_transactions_database():
 
 @app.route('/')
 def index():
+    if current_user.is_active:
+        return str(current_user)
     return render_template('index.html')
 
 
@@ -91,8 +99,8 @@ def transactions():
     transactionsToDisplay = Transactions.query.filter_by(username='test').order_by(Transactions.date.desc()).all()
     return render_template('transactions.html', transactionHistory=transactionsToDisplay)
 
-@app.route('/deposits', methods=["GET","POST"])
 
+@app.route('/deposits', methods=["GET","POST"])
 def modifyDeposits():
     if request.method == "POST":
         depositAmount = float(request.form.get('amount'))
@@ -128,6 +136,43 @@ def modifyExpenses():
         return render_template('expenses.html', statusMessage='Expense Recorded')
     else:
         return render_template('expenses.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    user = User.query.filter_by(username='test').first()
+    if request.method == 'POST':
+        if user:
+            login_user(user)
+            flash('Logged in successfully!')
+            return redirect('/')
+        else:
+            return render_template('login.html', status='NOT FOUND!')
+    return render_template('login.html')
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    newname = request.form.get('username')
+    if request.method == 'POST':
+        if not User.query.get(newname): # Not an existing user
+            user = User(username=newname)
+            login_user(user)
+            db.session.add(user)
+            db.session.commit()
+            return redirect('/')
+        else:
+            return render_template('register.html', status="Already exists!")
+    return render_template('register.html')
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect('/')
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(str(user_id))
 
 
 if __name__ == '__main__':
