@@ -1,7 +1,32 @@
 {% extends 'layout.html' %}
 
+{% block script %}
+<script>
+    function setDate() {
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth()+1; //January is 0!
+        var yyyy = today.getFullYear();
+        if(dd<10){
+                dd='0'+dd
+            } 
+            if(mm<10){
+                mm='0'+mm
+            } 
+
+        today = yyyy+'-'+mm+'-'+dd;
+        document.getElementById("dateField").setAttribute("max", today);
+    }
+</script>
+{% endblock %}
+
 {% block main %}
     <form action="/deposits" method="POST">
+        {% if statusMessage %}
+            <div class="alert alert-success">
+                {{ statusMessage }}
+            </div>
+        {% endif %}
         <div class="d-flex flex-column justify-content-center col-md-4 offset-md-4">
             <div class="input-group p-3">
                 <!-- <label for="amount"></label> -->
@@ -11,7 +36,7 @@
             <div class="input-group p-3">
                 <!-- <label for="date">Date</label> -->
                 <span class="input-group-text">Date: </span>
-                <input class="form-control" type="date" name="date" required="True">
+                <input class="form-control" type="date" name="date" id="dateField" required="True" min="1900-01-01">
             </div>
             <div class="input-group p-3">
                 <!-- <label for="savingPercent">Savings %</label> -->

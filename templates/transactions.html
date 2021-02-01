@@ -2,12 +2,15 @@
 
 {% block main %}
     <div class="container">
-       <table>
-           <tr>
-               <th>Date</th>
-               <th>Purpose</th>
-               <th>Amount</th>
-               <th>Category</th>
+        <div class="d-flex">
+            <h1 class="mx-auto p-4">Transaction History</h1>
+        </div>
+       <table class="table table-hover">
+           <tr class="table-secondary">
+               <th scope="col">Date</th>
+               <th scope="col">Purpose</th>
+               <th scope="col">Amount</th>
+               <th scope="col">Category</th>
            </tr>
            {% if transactionHistory == None %}
            <tr>
