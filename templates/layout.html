@@ -22,9 +22,15 @@
                 <a class="nav-link" href="/deposits">Deposit</a>
                 <a class="nav-link" href="/expenses">Withdraw</a>
                 <a class="nav-link" href="/">Home</a>
-                <div class="d-inline-flex flex-row-reverse">
-                    <a class="nav-link" href="/login">Login/Register</a>
-                </div>
+                {% if current_user %}
+                    <div class="d-inline-flex flex-row-reverse">
+                        <a class="nav-link" href="/logout">Logout</a>
+                    </div>
+                {% else %}
+                    <div class="d-inline-flex flex-row-reverse">
+                        <a class="nav-link" href="/login">Login/Register</a>
+                    </div>
+                {% endif %}
             </div>
         </nav>
         {% block main %}
