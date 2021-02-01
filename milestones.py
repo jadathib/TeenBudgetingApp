@@ -4,7 +4,10 @@ from sqlalchemy import exc, desc
 
 # Find milestone for first savings deposit
 def firstDay(username):
-    firstDate = Transactions.query.filter_by(username=username, purpose='deposit', ).order_by(Transactions.date.desc()).all()[-1]
+    try:
+        firstDate = Transactions.query.filter_by(username=username, purpose='deposit', ).order_by(Transactions.date.desc()).all()[-1]
+    except IndexError:
+        return "Milestone not yet reached"
     return firstDate.date
 
 # Find milestone for first $50 in savings

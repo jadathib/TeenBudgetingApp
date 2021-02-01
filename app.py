@@ -4,8 +4,11 @@ from models import db, User, Transactions
 from sqlalchemy import exc, desc
 from milestones import *
 from flask_login import LoginManager, login_user, current_user, logout_user, login_required
+import shutil 
 
 app = Flask(__name__)
+# shutil.copyfile('userbalances.db', '/tmp/userbalances.db')
+
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///userbalances.db'
 app.secret_key = b'\x1bt!"e\xf7)Q5\xebz"f\xfa\xe6K'
 
@@ -126,7 +129,7 @@ def modifyExpenses():
     if request.method == "POST":
         amountToDeduct = float(request.form.get('amount'))
         date = request.form.get('date')
-        category = request.form.get('category')
+        category = request.form.get('categories')
 
         newTransaction = Transactions(username=current_user.username, date=date, purpose='withdrawal', amount=amountToDeduct,
         category=category)
