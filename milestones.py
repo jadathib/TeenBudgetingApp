@@ -1,31 +1,59 @@
 from models import Transactions
 from sqlalchemy import exc, desc
 
+
 # Find milestone for first savings deposit
-def firstDay(Transactions_tb):
-    pass
+def firstDay():
+    firstDate = Transactions.query.filter_by(purpose='deposit').order_by(Transactions.date.desc()).all()[-1]
+    return firstDate.date
 
 # Find milestone for first $50 in savings
-def first50(Transactions_tb):
-    validTransactions = Transactions_tb.query.filter_by(purpose='deposit').order_by(Transactions.date.desc()).all()
+def first50():
+    validTransactions = Transactions.query.filter_by(purpose='deposit').order_by(Transactions.date.desc()).all()[::-1]
+    totalSavings = 0
     for transaction in validTransactions:
-        pass
+        percentage = transaction.savingPercent / 100
+        amountToAdd = transaction.amount * percentage
+        totalSavings = totalSavings + amountToAdd
+        if totalSavings >= 50 and totalSavings < 100:
+            return transaction.date
+    
+    return "Milestone not yet reached"
         # Keep track of total savings until you hit milestone, then return that date you hit it
-    pass
+
 # Find milestone for first $100 in savings
-def first100(Transactions_tb):
-    pass
+def first100():
+    validTransactions = Transactions.query.filter_by(purpose='deposit').order_by(Transactions.date.desc()).all()[::-1]
+    totalSavings = 0
+    for transaction in validTransactions:
+        percentage = transaction.savingPercent / 100
+        amountToAdd = transaction.amount * percentage
+        totalSavings = totalSavings + amountToAdd
+        if totalSavings >= 100 and totalSavings < 200:
+            return transaction.date
+
+    return "Milestone not yet reached"
+
 # Find milestone for first $200 in savings
-def first200(Transactions_tb):
-    pass
+def first200():
+    validTransactions = Transactions.query.filter_by(purpose='deposit').order_by(Transactions.date.desc()).all()[::-1]
+    totalSavings = 0
+    for transaction in validTransactions:
+        percentage = transaction.savingPercent / 100
+        amountToAdd = transaction.amount * percentage
+        totalSavings = totalSavings + amountToAdd
+        if totalSavings >= 200:
+            return transaction.date
+
+    return "Milestone not yet reached"
 
 
 
 # Get ALL milestones, format: DATE
-def getMilestones(Transactions_tb):
+def getMilestones():
     milestoneList = []
-    milestoneList.append(firstDay(Transactions_tb))
-    milestoneList.append(first50(Transactions))
-    milestoneList.append(first100(Transactions))
-    milestoneList.append(first200(Transactions))
+    milestoneList.append(firstDay())
+    milestoneList.append(first50())
+    milestoneList.append(first100())
+    milestoneList.append(first200())
     return milestoneList
