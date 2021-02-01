@@ -30,10 +30,7 @@ def initialize_user_database():
         errorInfo = e.orig.args
         print(errorInfo)
 
-with app.app_context():
-    db.create_all()
-    test = str(Transactions.query.filter_by(username='test').all())
-    print(test)
+
 
 @app.before_first_request
 def initialize_transactions_database():
@@ -67,52 +64,56 @@ def initialize_transactions_database():
 
 @app.route('/')
 def index():
-    if current_user.is_active:
-        return str(current_user)
     return render_template('index.html')
 
 
 @app.route('/checking', methods=["GET", "Post"])
-#No problem working well
+@login_required
 def checking():
     if request.method=="GET":
-        checkBalance = User.query.get('test').checkingBalance
+        checkBalance = current_user.checkingBalance
         return render_template('checking.html',checkBalance=checkBalance)
     else:
-        return redirect('/modifybalance')
+        return redirect('/')
 
 @app.route('/savings', methods=["GET","POST"])
+@login_required
 def savings():
     if request.method == "GET":
-        # return str(Transactions.query.filter_by(username='test').all())
-        firstSavingsDate = Transactions.query.order_by(Transactions.date.desc()).all()[0]
-        lastSavingsDate = Transactions.query.order_by(Transactions.date.desc()).all()[-1]
-        savingsBalance = User.query.get('test').savingBalance
+        try:
+            firstSavingsDate = Transactions.query.filter_by(username=current_user.username).order_by(Transactions.date.desc()).all()[0]
+            lastSavingsDate = Transactions.query.filter_by(username=current_user.username).order_by(Transactions.date.desc()).all()[-1]
+        except IndexError:
+            firstSavingsDate = "None"
+            lastSavingsDate = "None"
+        savingsBalance = current_user.savingBalance
         # Milestones: First day of savings, $50, $100, $200
-        milestones = getMilestones(Transactions)
+        milestones = getMilestones(current_user.username)
         return render_template('savings.html',firstSavingsDate=firstSavingsDate, savingBalance=savingsBalance, lastSavingsDate=lastSavingsDate, milestones=milestones)
     else:
-        return redirect('/modifybalance')
+        return redirect('/')
 
 @app.route('/transactions', methods=["GET","POST"])
+@login_required
 def transactions():
-    transactionsToDisplay = Transactions.query.filter_by(username='test').order_by(Transactions.date.desc()).all()
+    name = current_user.username
+    transactionsToDisplay = Transactions.query.filter_by(username=name).order_by(Transactions.date.desc()).all()
     return render_template('transactions.html', transactionHistory=transactionsToDisplay)
 
 
 @app.route('/deposits', methods=["GET","POST"])
+@login_required
 def modifyDeposits():
     if request.method == "POST":
         depositAmount = float(request.form.get('amount'))
         transactionDate = request.form.get('date')
         percentToSavings = float(request.form.get('savingPercent'))
-        newTransaction = Transactions(username='test', date=transactionDate, purpose='deposit', 
+        newTransaction = Transactions(username=current_user.username, date=transactionDate, purpose='deposit', 
             amount=depositAmount, savingPercent=percentToSavings)
-        currentUser = User.query.get('test')
         temp = float(percentToSavings / 100)
         temp2 = depositAmount - (depositAmount * temp)
-        currentUser.checkingBalance = currentUser.checkingBalance + temp2
-        currentUser.savingBalance = currentUser.savingBalance + depositAmount * temp
+        current_user.checkingBalance = current_user.checkingBalance + temp2
+        current_user.savingBalance = current_user.savingBalance + depositAmount * temp
         db.session.add(newTransaction)
         db.session.commit()
         return render_template('deposits.html', statusMessage='Deposit Successful')
@@ -120,16 +121,17 @@ def modifyDeposits():
         return render_template('deposits.html')
 
 @app.route('/expenses', methods=["GET","POST"])
+@login_required
 def modifyExpenses():
     if request.method == "POST":
         amountToDeduct = float(request.form.get('amount'))
         date = request.form.get('date')
         category = request.form.get('category')
 
-        newTransaction = Transactions(username='test', date=date, purpose='withdrawal', amount=amountToDeduct,
+        newTransaction = Transactions(username=current_user.username, date=date, purpose='withdrawal', amount=amountToDeduct,
         category=category)
-
-        currentUser = User.query.get('test')
+        
+        currentUser = current_user
         currentUser.checkingBalance = currentUser.checkingBalance - amountToDeduct
         db.session.add(newTransaction)
         db.session.commit()
@@ -139,7 +141,9 @@ def modifyExpenses():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    user = User.query.filter_by(username='test').first()
+    if current_user.is_authenticated:
+        return redirect('/')
+    user = User.query.filter_by(username=request.form.get('username')).first()
     if request.method == 'POST':
         if user:
             login_user(user)
