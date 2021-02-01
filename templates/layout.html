@@ -13,7 +13,7 @@
         {% endblock %}
     </head>
 
-    <body background="http://cdn.backgroundhost.com/backgrounds/subtlepatterns/nistri.png" onload="setDate()">
+    <body style="padding-bottom: 75px;" background="http://cdn.backgroundhost.com/backgrounds/subtlepatterns/nistri.png" onload="setDate()">
         <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-bottom">
             <div class="d-flex mx-auto justify-content-evenly nav-pills nav-justified navbar-nav">
                 <a class="nav-link" href="/checking">Checking</a>
@@ -22,9 +22,15 @@
                 <a class="nav-link" href="/deposits">Deposit</a>
                 <a class="nav-link" href="/expenses">Withdraw</a>
                 <a class="nav-link" href="/">Home</a>
-                <div class="d-inline-flex flex-row-reverse">
-                    <a class="nav-link" href="/login">Login/Register</a>
-                </div>
+                {% if current_user %}
+                    <div class="d-inline-flex flex-row-reverse">
+                        <a class="nav-link" href="/logout">Logout</a>
+                    </div>
+                {% else %}
+                    <div class="d-inline-flex flex-row-reverse">
+                        <a class="nav-link" href="/login">Login/Register</a>
+                    </div>
+                {% endif %}
             </div>
         </nav>
         {% block main %}
