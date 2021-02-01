@@ -89,13 +89,9 @@ def savings():
         return redirect('/modifybalance')
 
 @app.route('/transactions', methods=["GET","POST"])
-#only showing one transaction
 def transactions():
-    if request.method == 'GET':
-        transactionsToDisplay = Transactions.query.filter_by(username='test').all()
-        return str(transactionsToDisplay)
-    else:
-        return redirect('/modifybalance')
+    transactionsToDisplay = Transactions.query.filter_by(username='test').order_by(Transactions.date.desc()).all()
+    return render_template('transactions.html', transactionHistory=transactionsToDisplay)
 
 @app.route('/deposits', methods=["GET","POST"])
 #Testing with HTML file needed, gives 404 when run
