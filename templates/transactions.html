@@ -2,12 +2,15 @@
 
 {% block main %}
     <div class="container">
-       <table>
-           <tr>
-               <th>Date</th>
-               <th>Purpose</th>
-               <th>Amount</th>
-               <th>Category</th>
+        <div class="d-flex">
+            <h1 class="mx-auto p-4">Transaction History</h1>
+        </div>
+       <table class="table table-hover">
+           <tr class="table-secondary">
+               <th scope="col">Date</th>
+               <th scope="col">Purpose</th>
+               <th scope="col">Amount</th>
+               <th scope="col">Category</th>
            </tr>
            {% if transactionHistory == None %}
            <tr>
@@ -18,12 +21,21 @@
            </tr>
            {% else %}
                 {% for transaction in transactionHistory %}
-                <tr>
-                    <td>{{ transaction['date'] }}</td>
-                    <td>{{ transaction['purpose'] }}</td>
-                    <td>{{ transaction['amount'] }}</td>
-                    <td>{{ transaction['category'] }}</td>
-                </tr>
+                    {% if transaction['purpose'] == 'deposit' %}
+                    <tr style="background-color:forestgreen;">
+                        <td>{{ transaction['date'] }}</td>
+                        <td>{{ transaction['purpose'] }}</td>
+                        <td>{{ transaction['amount'] }}</td>
+                        <td>{{ transaction['category'] }}</td>
+                    </tr>
+                    {% else %}
+                    <tr style="background-color:orange;">
+                        <td>{{ transaction['date'] }}</td>
+                        <td>{{ transaction['purpose'] }}</td>
+                        <td>{{ transaction['amount'] }}</td>
+                        <td>{{ transaction['category'] }}</td>
+                    </tr>
+                    {% endif %}
                 {% endfor %}
            {% endif %}
        </table>
