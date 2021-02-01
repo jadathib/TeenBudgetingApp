@@ -2,7 +2,7 @@ from flask import Flask, render_template,request, redirect
 from cs50 import SQL
 from models import db, User, Transactions
 from sqlalchemy import exc, desc
-
+from milestones import *
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///userbalances.db'
@@ -80,9 +80,9 @@ def savings():
         firstSavingsDate = Transactions.query.order_by(Transactions.date.desc()).all()[0]
         lastSavingsDate = Transactions.query.order_by(Transactions.date.desc()).all()[-1]
         savingsBalance = User.query.get('test').savingBalance
-        # return str(lastSavingsDate)
-        # return str(savingsBalance)
-        return render_template('savings.html',firstSavingsDate=firstSavingsDate, savingBalance=savingsBalance, lastSavingsDate=lastSavingsDate)
+        # Milestones: First day of savings, $50, $100, $200
+        milestones = getMilestones(Transactions)
+        return render_template('savings.html',firstSavingsDate=firstSavingsDate, savingBalance=savingsBalance, lastSavingsDate=lastSavingsDate, milestones=milestones)
     else:
         return redirect('/modifybalance')
 
