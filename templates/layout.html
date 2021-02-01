@@ -22,7 +22,7 @@
                 <a class="nav-link" href="/deposits">Deposit</a>
                 <a class="nav-link" href="/expenses">Withdraw</a>
                 <a class="nav-link" href="/">Home</a>
-                {% if current_user %}
+                {% if current_user.is_authenticated %}
                     <div class="d-inline-flex flex-row-reverse">
                         <a class="nav-link" href="/logout">Logout</a>
                     </div>
