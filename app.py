@@ -15,7 +15,7 @@ def initialize_user_database():
     # db.create_all()
     try:
         db.create_all()
-        user1 = User(username='test', checkingBalance=1.00, savingBalance=0.00, savingPercent=0.00)
+        user1 = User(username='test', checkingBalance=1.00, savingBalance=0.00)
         if not bool(User.query.filter_by(username='test').first()):
             db.session.add(user1)
             User.query.get("test").checkingBalance = 4.00
@@ -35,12 +35,12 @@ def initialize_transactions_database():
     # db.create_all()
     try:
         db.create_all()
-        transaction1 = Transactions(username='test', date='1/31/2021', purpose='deposit', amount=10.00)
-        transaction2 = Transactions(username='test', date='2/10/2021', purpose='deposit', amount=10.00)
+        transaction1 = Transactions(username='test', date='1/31/2021', purpose='deposit', amount=10.00, savingPercent=0.0)
+        transaction2 = Transactions(username='test', date='2/10/2021', purpose='deposit', amount=10.00, savingPercent=0.0)
         if not bool(Transactions.query.filter_by(username='test').first()):
             db.session.add(transaction1)
             db.session.add(transaction2)
-            print(Transactions.query.filter_by(username='test').all())
+            #print(Transactions.query.filter_by(username='test').all())
             db.session.commit()
     except exc.IntegrityError as e:
         errorInfo = e.orig.args
@@ -98,22 +98,33 @@ def transactions():
         return redirect('/modifybalance')
 
 @app.route('/deposits', methods=["GET","POST"])
-#Testing with HTML file needed, gives 404 when run
+#date gets passed as None even though values are passed
+#How to modifty the checking amount of the existing user?
 def modifyDeposits():
     if request.method == "POST":
-        depositAmount = request.args.get('amount')
-        date = request.args.get('depositDate')
-        percentToSavings = request.args.get('percentToSave')
-        return render_template('deposits.html')
+        depositAmount = float(request.form.get('amount'))
+        transactionDate = request.form.get('date')
+        percentToSavings = float(request.form.get('savingPercent'))
+        #return str(type(percentToSavings))
+        newTransaction = Transactions(username='test', date=transactionDate, purpose='deposit', 
+            amount=depositAmount, savingPercent=percentToSavings)
+        currentUser = User.query.get('test')
+        temp = float(percentToSavings / 100)
+        temp2 = depositAmount - (depositAmount * temp)
+        currentUser.checkingBalance = currentUser.checkingBalance + temp2
+        currentUser.savingBalance = currentUser.savingBalance + depositAmount * temp
+        db.session.add(newTransaction)
+        db.session.commit()
+        return render_template('deposits.html', statusMessage='Deposit Successful')
     else:
-        return redirect('index.html')
+        return render_template('deposits.html')
 
 @app.route('/expenses', methods=["GET","POST"])
-#Testing with HTML file needed, gives 404 when run
+#cannot open expenses page get 404
 def modifyExpenses():
     if request.method == "POST":
-        amountToDeduct = request.args.get('amountToDeduct')
-        date = request.args.get('expenseDate')
+        amountToDeduct = request.args.get('amount')
+        date = request.args.get('date')
         category = request.args.get('expenseCategory')
         return render_template('expenses.html')
     else:
