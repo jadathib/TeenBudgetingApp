@@ -1,4 +1,4 @@
-#!/root/personalProjects/citihack/venv/bin/python3
+#!/Users/jadathibodeaux/IdeaProjects/TeenBudgetingApp/venv/bin/python3.13
 # -*- coding: utf-8 -*-
 import re
 import sys
