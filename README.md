@@ -1,7 +1,7 @@
 # TeenBudgetingApp
  
 This is a budgeting app for teens that allows
-deposits, allocates a desired percentage of all desposits to savings,
+deposits, allocates a desired percentage of all deposits to savings,
 and tracks expenses. The app was created to give teens a way to easily save money
 and build up and emergency fund for college.
 
