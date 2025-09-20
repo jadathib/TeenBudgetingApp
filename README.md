@@ -37,10 +37,6 @@ Built to help young adults learn **financial responsibility** and start building
 
 ## 📸 Screenshots
 
-*(Add your screenshots here — e.g., home page, savings page, transactions page)*
-
-Example:
-
 | Home | Savings | Transactions |
 |------|---------|--------------|
 | ![Home](static/screenshots/home.png) | ![Savings](static/screenshots/savings.png) | ![Transactions](static/screenshots/transactions.png) |
