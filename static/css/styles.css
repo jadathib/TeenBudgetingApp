@@ -1,0 +1,6 @@
+body {
+    background-image: url("../images/nistri.png"); /* grey tile pattern */
+    background-repeat: repeat;  /* repeat tile seamlessly */
+    background-size: auto;      /* keep original pattern size */
+    font-family: 'Londrina Solid', sans-serif;
+}
